@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<body ng-app="myApp" ng-controller="listCtrl">
+
+<h2>My shopping List</h2>
+
+<form ng-submit="listAdd()">
+    Item <input type="text" ng-model="listInput" size="50" placeholder="Add New">
+    Number of items <input type="text" ng-model="itemNo" size="10" placeholder="1">
+    Item price <input type="text" ng-model="itemPrice" size="10" placeholder="0">
+    <input type="submit" value="Add New">
+</form>
+
+<br>
+
+<table>
+    <tr>
+        <th width="20">Check</th>
+        <th width="200">Name</th>
+        <th width="100">Quantity</th>
+        <th width="100">Price</th>
+    </tr>
+    <tr ng-repeat="x in shoppingBasket">
+        <td align="center"><input type="checkbox" ng-model="x.done"></td>
+        <td align="center"><span ng-bind="x.item"></span></td>
+        <td align="center"><span ng-bind="x.itemNo"></span></td>
+        <td align="center"><span ng-bind="x.itemPrice"></span></td>
+        <td><span ng-bind="sum"></span> + {{sum}}</td>
+    </tr>
+</table>
+
+<p><button ng-click="remove()">Remove marked</button></p>
+
+
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('listCtrl', function($scope) {
+        $scope.shoppingBasket = [{item:'apples', itemNo:2, itemPrice:3, done:false}, {item:'bananas', itemNo:1, itemPrice:1, done:true}];
+        var sum = 0;
+
+        $scope.listAdd = function() {
+            $scope.shoppingBasket.push({item:$scope.listInput, itemNo:$scope.itemNo, itemPrice:$scope.itemPrice, done:false});
+            $scope.listInput = "";
+            $scope.itemNo;
+            $scope.itemPrice;
+            sum += $scope.itemPrice * $scope.itemNo;
+        };
+
+
+
+
+        $scope.remove = function() {
+            var oldList = $scope.shoppingBasket;
+            $scope.shoppingBasket = [];
+            angular.forEach(oldList, function(x) {
+                if (!x.done) $scope.shoppingBasket.push(x);
+            });
+        };
+    });
+</script>
+
+</body>
+</html>
